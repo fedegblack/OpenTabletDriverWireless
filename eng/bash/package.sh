@@ -70,13 +70,15 @@ fi
 ### Set defaults
 
 if [[ "${NET_RUNTIME}" =~ ^win-.*$ ]]; then
-  # Windows builds should be single file and self-contained
   SINGLE_FILE="true"
-  SELF_CONTAINED="true"
+  SELF_CONTAINED="false"   # don’t bundle the runtime
+  PUBLISH_TRIMMED="true"   # strip unused framework parts
+  PUBLISH_READYTORUN="true" # precompile IL to native
 
   PACKAGE_GEN="${PACKAGE_GEN:-"windows"}"
   PROJECTS+=('OpenTabletDriver.UX.Wpf')
 fi
+
 
 if [[ "${NET_RUNTIME}" =~ ^osx-.*$ ]]; then
   # signed builds must be single file, otherwise reduce package size by not using single file
