@@ -44,8 +44,33 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      # Keep the existing build-wrapper call
       - uses: ./.github/actions/build-wrapper
         with:
           runtime: ${{ matrix.runtime-prefix }}${{ matrix.runtime-suffix }}
           package-name: ${{ matrix.build }}
           container: ${{ matrix.container }}
+
+      # Add a lightweight self-contained publish step
+      - name: Publish Self-Contained Daemon
+        run: |
+          dotnet publish OpenTabletDriver.Daemon \
+            -c Release \
+            -r ${{ matrix.runtime-prefix }}${{ matrix.runtime-suffix }} \
+            --self-contained true \
+            /p:PublishSingleFile=true
+
+      - name: Publish Self-Contained UX
+        run: |
+          dotnet publish OpenTabletDriver.UX.${{ matrix.build }} \
+            -c Release \
+            -r ${{ matrix.runtime-prefix }}${{ matrix.runtime-suffix }} \
+            --self-contained true \
+            /p:PublishSingleFile=true
+
+      - name: Upload Self-Contained Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.build }}-${{ matrix.runtime-prefix }}${{ matrix.runtime-suffix }}-selfcontained
+          path: |
+            **/bin/Release/${{ matrix.runtime-prefix }}${{ matrix.runtime-suffix }}/publish/*
