@@ -70,8 +70,9 @@ fi
 ### Set defaults
 
 if [[ "${NET_RUNTIME}" =~ ^win-.*$ ]]; then
-  # the following vars are imported from old packaging script
+  # Windows builds should be single file and self-contained
   SINGLE_FILE="true"
+  SELF_CONTAINED="true"
 
   PACKAGE_GEN="${PACKAGE_GEN:-"windows"}"
   PROJECTS+=('OpenTabletDriver.UX.Wpf')
@@ -87,6 +88,10 @@ if [[ "${NET_RUNTIME}" =~ ^osx-.*$ ]]; then
 fi
 
 if [[ "${NET_RUNTIME}" =~ ^linux-.*$ ]]; then
+  # Linux builds should also be self-contained single file
+  SINGLE_FILE="true"
+  SELF_CONTAINED="true"
+
   PROJECTS+=('OpenTabletDriver.UX.Gtk')
 fi
 
