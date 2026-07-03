@@ -15,29 +15,12 @@ jobs:
       VERSION_SUFFIX: ${{ github.event.inputs.version_suffix }}
     strategy:
       matrix:
-        build: [windows, macos, BinaryTarBall, RedHat, Debian, Simple]
+        build: [windows]
         runtime-suffix: [x64]
         include:
-          - build: BinaryTarBall
-            os: ubuntu-latest
-            runtime-prefix: linux-
-          - build: RedHat
-            os: ubuntu-latest
-            runtime-prefix: linux-
-            container: fedora
-          - build: Debian
-            os: ubuntu-latest
-            runtime-prefix: linux-
-          - build: Simple
-            os: ubuntu-latest
-            runtime-prefix: linux-
-          - build: macos
-            os: ubuntu-latest
-            runtime-prefix: osx-
           - build: windows
             os: windows-latest
             runtime-prefix: win-
-    # TODO: release or debug build
     name: ${{ matrix.build }} ${{ matrix.runtime-prefix }}${{ matrix.runtime-suffix }} Publish
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
@@ -49,5 +32,3 @@ jobs:
           runtime: ${{ matrix.runtime-prefix }}${{ matrix.runtime-suffix }}
           package-name: ${{ matrix.build }}
           container: ${{ matrix.container }}
-          # Added flags to make publish self-contained
-          extra-args: "--self-contained true /p:PublishSingleFile=true"
