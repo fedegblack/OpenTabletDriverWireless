@@ -36,4 +36,3 @@ runs:
       with:
         runtime: ${{ inputs.runtime }}
         package-name: ${{ inputs.package-name }}
-        extra-args: "--self-contained true /p:PublishSingleFile=true"
