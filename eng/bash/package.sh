@@ -70,15 +70,12 @@ fi
 ### Set defaults
 
 if [[ "${NET_RUNTIME}" =~ ^win-.*$ ]]; then
+  # the following vars are imported from old packaging script
   SINGLE_FILE="true"
-  SELF_CONTAINED="false"   # don’t bundle the runtime
-  PUBLISH_TRIMMED="true"   # strip unused framework parts
-  PUBLISH_READYTORUN="true" # precompile IL to native
 
   PACKAGE_GEN="${PACKAGE_GEN:-"windows"}"
   PROJECTS+=('OpenTabletDriver.UX.Wpf')
 fi
-
 
 if [[ "${NET_RUNTIME}" =~ ^osx-.*$ ]]; then
   # signed builds must be single file, otherwise reduce package size by not using single file
@@ -90,10 +87,6 @@ if [[ "${NET_RUNTIME}" =~ ^osx-.*$ ]]; then
 fi
 
 if [[ "${NET_RUNTIME}" =~ ^linux-.*$ ]]; then
-  # Linux builds should also be self-contained single file
-  SINGLE_FILE="true"
-  SELF_CONTAINED="true"
-
   PROJECTS+=('OpenTabletDriver.UX.Gtk')
 fi
 
